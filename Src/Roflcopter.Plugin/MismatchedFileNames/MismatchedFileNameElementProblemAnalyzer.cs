@@ -26,11 +26,13 @@ namespace Roflcopter.Plugin.MismatchedFileNames
             {
                 var psiSourceFile = file.GetSourceFile().NotNull("file.GetSourceFile() != null");
 
-                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(psiSourceFile.Name);
+                var fileName = psiSourceFile.Name;
+                var expectedFileName = mainTypeDeclaration.DeclaredName + Path.GetExtension(fileName);
 
-                if (fileNameWithoutExtension != mainTypeDeclaration.DeclaredName)
+                if (fileName != expectedFileName)
                 {
-                    consumer.AddHighlighting(new MismatchedFileNameHighlighting(mainTypeDeclaration, psiSourceFile.Name));
+                    consumer.AddHighlighting(
+                        new MismatchedFileNameHighlighting(mainTypeDeclaration, fileName, expectedFileName));
                 }
             }
         }
